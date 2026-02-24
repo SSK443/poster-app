@@ -1,137 +1,154 @@
-import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
-import {  Link, useNavigate } from 'react-router-dom';
-import {  useForm } from 'react-hook-form';
-import { CommonBtn, CommonInput, Logo } from '../index';
-import authService from '../../appwrite/auth';
-import { login  } from '../../store/features/authSlice';
+import React from "react";
+import { Logo, CommonBtn, CommonInput } from "../index";
+import { useForm } from "react-hook-form";
+import authService from "../../appwrite/auth";
+import { useDispatch } from "react-redux";
+import { login } from "../../store/features/authSlice";
+import { Link, useNavigate } from "react-router-dom";
 
 interface SignUpFormData {
+  name: string;
   email: string;
   password: string;
-  name: string;
 }
 
-function SignUp() {
-  const[error, setError] = useState<string | null>(null);
-  const[showPassword, setShowPassword] = useState<boolean>(false);
-  const dispatch = useDispatch();
+export default function SignUp() {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+
   const {
     register,
     handleSubmit,
     formState: { isSubmitting },
   } = useForm<SignUpFormData>();
 
+  const [error, setError] = React.useState<string | null>(null);
+  const [showPassword, setShowPassword] = React.useState(false);
 
-  async function handleCreateAccount(data: SignUpFormData): Promise<void> {
-              
+  const handleSignUp = async (data: SignUpFormData) => {
     setError(null);
-    try{
-      const userData=await authService.createAccount(data);
-      if(userData){
-       const currentUser = await authService.currentUser();
-      if(currentUser){
-        dispatch(login(currentUser));
-        navigate("/");
+
+    try {
+      const user = await authService.createAccount(data);
+
+      if (user) {
+        const currentUser = await authService.currentUser();
+        if (currentUser) {
+          dispatch(login(currentUser));
+          navigate("/");
+        }
       }
-
+    } catch (error: any) {
+      setError(error?.message || "Failed to create account.");
     }
-  }
-    catch(error){
- setError("Failed to create account. Please try again.");
+  };
 
+  return (
+    <div className="min-h-screen flex items-center justify-center 
+    bg-white dark:bg-slate-900 transition-colors duration-300">
 
-    }
-  }
+      <div className="w-full max-w-md 
+      bg-gray-50 dark:bg-slate-950 
+      border border-gray-200 dark:border-slate-800 
+      rounded-2xl shadow-lg px-8 py-10">
 
-            return (
-              <div className="min-h-screen w-full flex items-center justify-center bg-gradient-to-br from-blue-50 to-indigo-100">
-                <div className="w-full max-w-md bg-white rounded-2xl shadow-xl px-8 py-10">
-                  <div className="flex flex-col items-center gap-2 mb-6">
-                    <Logo width="110px" />
-                    <h2 className="text-2xl font-bold text-gray-900">
-                      Create your account
-                    </h2>
-                  </div>
+        <div className="flex flex-col items-center gap-3 mb-8">
+          <Logo width="80px" />
+          <h1 className="text-2xl font-semibold 
+          text-gray-900 dark:text-gray-200">
+            Create Account
+          </h1>
+          <p className="text-sm text-gray-500 dark:text-slate-400">
+            Start your journey with us
+          </p>
+        </div>
 
-                  <div className="min-h-[40px]">
-                    {error && (
-                      <p className="text-red-600 text-center text-sm font-medium">
-                        {error}
-                      </p>
-                    )}
-                  </div>
+        {error && (
+          <div className="mb-4 rounded-lg 
+          bg-red-50 dark:bg-red-900/30 
+          border border-red-200 dark:border-red-800 
+          text-red-600 dark:text-red-400 
+          px-4 py-2 text-sm text-center">
+            {error}
+          </div>
+        )}
 
-                  <form
-                    onSubmit={handleSubmit(handleCreateAccount)}
-                    className="space-y-5"
-                  >
-                    <CommonInput
-                      label="Name"
-                      autoComplete="name"
-                      placeholder="Enter your name"
-                      className="focus:ring-2 focus:ring-blue-500"
-                      {...register("name", { required: true })}
-                    />
+      
+        <form onSubmit={handleSubmit(handleSignUp)} className="space-y-5">
 
-                    <CommonInput
-                      label="Email"
-                      type="email"
-                      autoComplete="email"
-                      placeholder="Enter your email"
-                      className="focus:ring-2 focus:ring-blue-500"
-                      {...register("email", { required: true })}
-                    />
+          <CommonInput
+            label="Name"
+            placeholder="Enter your name"
+            {...register("name", { required: "Name is required" })}
+          />
 
-                    <div className="relative">
-                      <CommonInput
-                        label="Password"
-                        type={showPassword ? "text" : "password"}
-                        autoComplete="new-password"
-                        placeholder="Create a password"
-                        className="focus:ring-2 focus:ring-blue-500 pr-12"
-                        {...register("password", {
-                          required: true,
-                          minLength: 6,
-                        })}
-                      />
-                      <button
-                        type="button"
-                        aria-label="Toggle password visibility"
-                        onClick={() => setShowPassword(!showPassword)}
-                        className="absolute right-3 top-10 text-sm text-blue-600 hover:underline"
-                      >
-                        {showPassword ? "Hide" : "Show"}
-                      </button>
-                    </div>
+          <CommonInput
+            label="Email"
+            type="email"
+            placeholder="Enter your email"
+            {...register("email", {
+              required: "Email is required",
+              pattern: {
+                value: /^\S+@\S+\.\S+$/,
+                message: "Invalid email address",
+              },
+            })}
+          />
 
-                    <CommonBtn
-                      type="submit"
-                      disabled={isSubmitting}
-                      bgColor="bg-green-600"
-                      hoverBg="hover:bg-green-700"
-                      className="w-full disabled:opacity-60"
-                    >
-                      {isSubmitting ? "Creating..." : "Create Account"}
-                    </CommonBtn>
+          <div className="relative">
+            <CommonInput
+              label="Password"
+              type={showPassword ? "text" : "password"}
+              placeholder="Create a password"
+              className="pr-12"
+              {...register("password", {
+                required: "Password is required",
+                minLength: {
+                  value: 6,
+                  message: "Minimum 6 characters",
+                },
+              })}
+            />
 
-                    <div className="text-center text-sm text-gray-600">
-                      Already have an account?{" "}
-                      <Link
-                        to="/login"
-                        className="font-medium text-blue-600 hover:underline"
-                      >
-                        Sign in
-                      </Link>
-                    </div>
-                  </form>
-                </div>
-              </div>
-            );
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-10 text-sm 
+              text-blue-600 dark:text-blue-500 
+              hover:underline"
+            >
+              {showPassword ? "Hide" : "Show"}
+            </button>
+          </div>
 
+          <CommonBtn
+            type="submit"
+            disabled={isSubmitting}
+            className="w-full py-3 rounded-xl 
+            bg-blue-600 dark:bg-blue-500 
+            hover:bg-blue-700 dark:hover:bg-blue-600 
+            text-white font-medium 
+            transition-all duration-200 
+            disabled:opacity-60"
+          >
+            {isSubmitting ? "Creating..." : "Create Account"}
+          </CommonBtn>
 
-            }
-          
+        </form>
 
-export default SignUp
+        {/* Footer */}
+        <div className="mt-6 text-center text-sm 
+        text-gray-500 dark:text-slate-400">
+          Already have an account?{" "}
+          <Link
+            to="/login"
+            className="text-blue-600 dark:text-blue-500 
+            font-medium hover:underline"
+          >
+            Sign in
+          </Link>
+        </div>
+      </div>
+    </div>
+  );
+}

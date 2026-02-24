@@ -1,143 +1,103 @@
-import React from 'react'
-import { Link } from 'react-router-dom';
-import Logo from '../Logo';
+
+
+import { Link } from "react-router-dom";
+import Container from "../container/Container";
+import Logo from "../Logo";
 
 function Footer() {
   return (
-    <section className="relative overflow-hidden py-10 bg-gray-400 border border-t-2 border-t-black">
-      <div className="relative z-10 mx-auto max-w-7xl px-4">
-        <div className="-m-6 flex flex-wrap">
-          <div className="w-full p-6 md:w-1/2 lg:w-5/12">
-            <div className="flex h-full flex-col justify-between">
-              <div className="mb-4 inline-flex items-center">
-                <Logo width="100px" />
-              </div>
-              <div>
-                <p className="text-sm text-gray-600">
-                  &copy; Copyright 2023. All Rights Reserved by DevUI.
-                </p>
-              </div>
-            </div>
+    <footer className="border-2 border-gray-300 dark:border-slate-800 bg-white dark:bg-slate-900 shadow-2xl">
+        {/* Top section */}
+        <Container className="pt-5">
+        <div className="grid grid-cols-1 gap-10 md:grid-cols-2 lg:grid-cols-4">
+          
+          {/* Brand */}
+          <div className="space-y-4">
+            <Link to="/" className="inline-flex items-center gap-2">
+              <Logo width="48px" />
+              <span className="text-xl font-bold dark:text-gray-200 text-blue-600">
+                BlogApp
+              </span>
+            </Link>
+            <p className="text-sm text-gray-500 dark:text-slate-400 max-w-xs">
+              A modern blog platform to share thoughts, stories, and ideas with
+              the world.
+            </p>
           </div>
-          <div className="w-full p-6 md:w-1/2 lg:w-2/12">
-            <div className="h-full">
-              <h3 className="tracking-px mb-9  text-xs font-semibold uppercase text-gray-500">
-                Company
-              </h3>
-              <ul>
-                <li className="mb-4">
-                  <Link
-                    className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                    to="/"
-                  >
-                    Features
-                  </Link>
-                </li>
-                <li className="mb-4">
-                  <Link
-                    className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                    to="/"
-                  >
-                    Pricing
-                  </Link>
-                </li>
-                <li className="mb-4">
-                  <Link
-                    className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                    to="/"
-                  >
-                    Affiliate Program
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                    to="/"
-                  >
-                    Press Kit
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="w-full p-6 md:w-1/2 lg:w-2/12">
-            <div className="h-full">
-              <h3 className="tracking-px mb-9  text-xs font-semibold uppercase text-gray-500">
-                Support
-              </h3>
-              <ul>
-                <li className="mb-4">
-                  <Link
-                    className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                    to="/"
-                  >
-                    Account
-                  </Link>
-                </li>
-                <li className="mb-4">
-                  <Link
-                    className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                    to="/"
-                  >
-                    Help
-                  </Link>
-                </li>
-                <li className="mb-4">
-                  <Link
-                    className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                    to="/"
-                  >
-                    Contact Us
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                    to="/"
-                  >
-                    Customer Support
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div className="w-full p-6 md:w-1/2 lg:w-3/12">
-            <div className="h-full">
-              <h3 className="tracking-px mb-9  text-xs font-semibold uppercase text-gray-500">
-                Legals
-              </h3>
-              <ul>
-                <li className="mb-4">
-                  <Link
-                    className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                    to="/"
-                  >
-                    Terms &amp; Conditions
-                  </Link>
-                </li>
-                <li className="mb-4">
-                  <Link
-                    className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                    to="/"
-                  >
-                    Privacy Policy
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    className=" text-base font-medium text-gray-900 hover:text-gray-700"
-                    to="/"
-                  >
-                    Licensing
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
+
+          {/* Company */}
+          <FooterColumn
+            title="Company"
+            links={[
+              "Features",
+              "Pricing",
+              "Affiliate Program",
+              "Press Kit",
+            ]}
+          />
+
+          {/* Support */}
+          <FooterColumn
+            title="Support"
+            links={[
+              "Account",
+              "Help",
+              "Contact Us",
+              "Customer Support",
+            ]}
+          />
+
+          {/* Legal */}
+          <FooterColumn
+            title="Legal"
+            links={[
+              "Terms & Conditions",
+              "Privacy Policy",
+              "Licensing",
+            ]}
+          />
         </div>
-      </div>
-    </section>
-  );
+
+        {/* Bottom section */}
+        <div className="mt-12 border-t border-gray-200 dark:border-slate-800 pt-6">
+          <p className="text-sm text-gray-500 dark:text-slate-400 text-center">
+            © {new Date().getFullYear()} SSKUI. All rights reserved.
+          </p>
+        </div>
+      </Container>
+    </footer>
+          )
 }
 
-export default Footer
+export default Footer;
+
+
+function FooterColumn({
+  title,
+  links,
+}: {
+  title: string;
+  links: string[];
+}) {
+  return (
+    <div>
+      <h3 className="mb-4 text-xs font-semibold uppercase tracking-wide text-gray-500 dark:text-slate-400">
+        {title}
+      </h3>
+      <ul className="space-y-3">
+        {links.map((link) => (
+          <li key={link}>
+            <Link
+              to="/"
+              className="text-sm text-gray-700 hover:text-blue-600
+                         dark:text-gray-300 dark:hover:text-blue-400
+                         transition-colors"
+            >
+              {link}
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}

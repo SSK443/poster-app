@@ -8,6 +8,14 @@ interface CreatePostData {
   status: "active" | "inactive" | "draft";
   userId: string;
 }
+export interface PostDocument extends Models.Document {
+  title: string;
+  content: string;
+  featuredImage: string;
+  status: "active" | "inactive" | "draft";
+  userId: string;
+}
+
 interface UpdatePostData {
   title?: string;
   content?: string;
@@ -29,40 +37,40 @@ class DbService {
   }
   //create a post
   async createPost({
-    title,
-    slug,
-    content,
-    featuredImage,
-    status,
-    userId,
-  }: CreatePostData): Promise<Models.Document> {
-    try {
-      return await this.databases.createDocument(
-        config.vite_appwrite_db_id,
-        config.vite_appwrite_collection_id,
-        slug,
-        {
-          title,
-          slug,
-          content,
-          featuredImage,
-          status,
-          userId,
-        }
-      );
-    } catch (error) {
-      console.error("Error creating post:", error);
-      throw error;
-    }
+  title,
+  slug,
+  content,
+  featuredImage,
+  status,
+  userId,
+}: CreatePostData): Promise<PostDocument> {
+  try {
+    return await this.databases.createDocument<PostDocument>(
+      config.vite_appwrite_db_id,
+      config.vite_appwrite_collection_id,
+      slug,
+      {
+        title,
+        content,
+        featuredImage,
+        status,
+        userId
+      }
+    );
+  } catch (error) {
+    console.error("Error creating post db of appwrite:", error);
+    throw error
   }
+}
+
 
   //update that post
   async updatePost(
     slug: string,
     { title, content, featuredImage, status }: UpdatePostData
-  ): Promise<Models.Document> {
+  ): Promise<PostDocument> {
     try {
-      return await this.databases.updateDocument(
+      return await this.databases.updateDocument<PostDocument>(
         config.vite_appwrite_db_id,
         config.vite_appwrite_collection_id,
         slug,
@@ -79,24 +87,26 @@ class DbService {
     }
   }
   //delete that post
-  async deletePost(slug: string): Promise<boolean> {
+  async deletePost(slug: string): Promise<void> {
     try {
       await this.databases.deleteDocument(
         config.vite_appwrite_db_id,
         config.vite_appwrite_collection_id,
         slug
       );
-      return true;
+    
+      
     } catch (error) {
       console.error("Error deleting post:", error);
-      throw error;
-      return false;
+      
+     throw error;
+     
     }
   }
-  //get post by slug
-  async getPost(slug: string): Promise<Models.Document> {
+  //get a post by slug
+  async getPost(slug: string): Promise<PostDocument> {
     try {
-      return await this.databases.getDocument(
+      return await this.databases.getDocument<PostDocument>(
         config.vite_appwrite_db_id,
         config.vite_appwrite_collection_id,
         slug
@@ -107,49 +117,66 @@ class DbService {
     }
   }
   //active all posts
-  async getPosts(
-    queries = [Query.equal("status", "active")]
-  ): Promise<boolean | Models.DocumentList> {
-    try {
-      return await this.databases.listDocuments(
-        config.vite_appwrite_db_id,
-        config.vite_appwrite_collection_id,
-        queries
-      );
-    } catch (error) {
-      console.error("Error getting posts:", error);
-      throw error;
-      return false;
-    }
+ async getPosts(
+  queries = [Query.equal("status", "active")]
+): Promise<Models.DocumentList<PostDocument>> {
+  try {
+    return await this.databases.listDocuments<PostDocument>(
+      config.vite_appwrite_db_id,
+      config.vite_appwrite_collection_id,
+      queries
+    );
+  } catch (error) {
+    console.error("Error getting posts:", error);
+    throw error;
   }
+}
+
+
+
+//files service to update
+
   //file upload service
   async uploadFile(file: File): Promise<Models.File> {
     try {
-      return await this.bucket.createFile({
-        bucketId: config.vite_appwrite_bucket_id,
-        fileId: ID.unique(),
+      return await this.bucket.createFile(
+        config.vite_appwrite_bucket_id,
+        ID.unique(),
         file,
-      });
+      );
     } catch (error) {
       console.error("Error uploading file:", error);
-      throw error;
+       throw error; 
+    
     }
   }
   //file delete service
-  async deleteFile(fileId: string): Promise<boolean> {
+  async deleteFile(fileId: string): Promise<void> {
     try {
-      await this.bucket.deleteFile(config.vite_appwrite_bucket_id, fileId);
-      return true;
+      await this.bucket.deleteFile(
+        config.vite_appwrite_bucket_id,
+         fileId
+      );
+     
     } catch (error) {
       console.error("Error deleting file:", error);
-      throw error;
+        throw error;
     }
   }
 
   //file preview service
-  getFilePreview(fileId: string): string {
-    return this.bucket.getFilePreview(config.vite_appwrite_bucket_id, fileId);
-  }
+  // getFilePreview(fileId: string): string {
+  //   return this.bucket.getFilePreview(
+  //     config.vite_appwrite_bucket_id,
+  //      fileId
+  //     );
+  // }
+  getFileView(fileId: string): string {
+  return this.bucket.getFileView(
+    config.vite_appwrite_bucket_id,
+    fileId
+  );
+}
 }
 const dbService = new DbService();
 

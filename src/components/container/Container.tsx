@@ -1,11 +1,17 @@
-import React from 'react'
-
-function Container({children}: {children: React.ReactNode}) {
+import React from "react";
+// This component is used to wrap the content of the page and provide a consistent layout
+function Container({
+  children,
+  className,
+}: {
+  children: React.ReactNode;
+  className?: string;
+}) {
   return (
-    <div className='w-full max-w-7xl mx-auto px-4'>
+    <div className={`min-w-full mx-auto px-4 max-w-7xl  ${className}`}>
       {children}
     </div>
-  )
+  );
 }
 
-export default Container
+export default Container;

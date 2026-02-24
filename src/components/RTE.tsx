@@ -1,98 +1,97 @@
-import React from 'react'
-import { Editor } from '@tinymce/tinymce-react';
-import { Controller } from 'react-hook-form';
 
-interface RTEProps {
-  name:string
+
+import { Editor } from "@tinymce/tinymce-react";
+import { Controller } from "react-hook-form";
+import type { Control, FieldValues, Path } from "react-hook-form";
+
+interface RTEProps<T extends FieldValues> {
+  name: Path<T>;
   label?: string;
-  control: any;
-  defaultValue?: string;
- 
+  control: Control<T>;
 }
 
-function RTE({name,label,control,defaultValue=""}:RTEProps) {
+export default function RTE<T extends FieldValues>({
+  name,
+  label,
+  control,
+}: RTEProps<T>) {
   return (
-    <div className="w-full">
+    <div className="w-full flex flex-col gap-3">
       {label && (
-        <label className="block text-sm font-medium text-gray-700 mb-1">
+        <label className="text-sm font-medium text-gray-900 dark:text-gray-200">
           {label}
         </label>
       )}
-      <Controller
-        name={name || "content"}
-        control={control}
-        defaultValue={defaultValue}
-        render={({ field: { onChange, value } }) => (
-          <Editor
-            value={value}
-            initialValue={defaultValue}
-            onEditorChange={onChange}
-            init={{
-              height: 500,
-              menubar: true,
 
-              plugins: [
-                "advlist",
-                "autolink",
-                "lists",
-                "link",
-                "image",
-                "charmap",
-                "preview",
-                "anchor",
-                "searchreplace",
-                "visualblocks",
-                "code",
-                "fullscreen",
-                "insertdatetime",
-                "media",
-                "table",
-                "help",
-                "wordcount",
-                "emoticons",
-                "codesample",
-                "pagebreak",
-                "quickbars",
-              ],
+      <div
+        className="
+          rounded-2xl
+          border border-gray-200 dark:border-slate-800
+          bg-gray-50 dark:bg-slate-950
+          shadow-sm
+          focus-within:ring-2
+          focus-within:ring-blue-600 dark:focus-within:ring-blue-500
+          transition-all duration-200
+          overflow-hidden
+        "
+      >
+        <Controller
+          name={name}
+          control={control}
+          render={({ field }) => (
+            <Editor
+            apiKey="minsn0aoub3lyjsv9lzga6bs0qko4cny8vuckpgxb2u30uup"
+              value={(field.value ?? "") as string}
+              // initialValue="text"
+              onEditorChange={field.onChange}
+              init={{
+                height: 500,
+                menubar: true,
+                branding: false,
 
-              toolbar:
-                "undo redo | blocks fontfamily fontsize | " +
-                "bold italic underline strikethrough | forecolor backcolor | " +
-                "alignleft aligncenter alignright alignjustify | " +
-                "bullist numlist outdent indent | " +
-                "link image media table | " +
-                "emoticons codesample | " +
-                "removeformat | fullscreen preview code help",
+                plugins: [
+                  "advlist",
+                  "autolink",
+                  "lists",
+                  "link",
+                  "image",
+                  "charmap",
+                  "preview",
+                  "anchor",
+                  "searchreplace",
+                  "visualblocks",
+                  "code",
+                  "fullscreen",
+                  "insertdatetime",
+                  "media",
+                  "table",
+                  "help",
+                  "wordcount",
+                  "emoticons",
+                  "codesample",
+                  "quickbars",
+                ],
 
-              toolbar_mode: "sliding",
+                toolbar:
+                  "undo redo | bold italic underline | " +
+                  "alignleft aligncenter alignright | " +
+                  "bullist numlist | link image | code fullscreen",
 
-              quickbars_selection_toolbar:
-                "bold italic | quicklink h2 h3 blockquote",
+                toolbar_mode: "sliding",
 
-              quickbars_insert_toolbar: "quickimage quicktable",
+                skin: "oxide",
+                content_css: "default",
 
-              contextmenu: "link image table",
 
-              branding: false,
+              }}
+            />
+          )}
+        />
+      </div>
 
-              images_upload_url: "/upload", // optional
-              automatic_uploads: true,
-
-              file_picker_types: "image media",
-              image_title: true,
-
-              content_style: `
-      body {
-        font-family: Inter, system-ui, sans-serif;
-        font-size: 16px;
-      }
-    `,
-            }}
-          />
-        )}
-      />
+      <p className="text-xs text-gray-500 dark:text-slate-400">
+        Use the toolbar to format your content.
+      </p>
     </div>
   );
 }
-
-export default RTE

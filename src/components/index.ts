@@ -7,6 +7,11 @@ import CommonBtn from "./buttons/CommonBtn";
 import CommonInput from "../components/input/CommonInput"
 import RTE from "./RTE";
 import Selection from "./Selection";
+import Login from "./auth/Login";
+import SignUp from "./auth/SignUp";
+import PostCard from "./PostCard";
+import PostForm from "./post-form/PostForm";
+import Protected from "./auth/Protected";
 
 export { Header, 
   Footer,
@@ -16,5 +21,11 @@ export { Header,
   CommonBtn,
   CommonInput,
   RTE ,
-  Selection
+  Selection,
+  Login,
+  SignUp,
+  PostCard,
+  PostForm,
+  Protected
+  
 };

@@ -1,0 +1,20 @@
+🎨 Color Palette (Use This)
+🌞 Light Mode
+background:  #ffffff  bg-white
+surface:     #f9fafb  bg-gray-50 // cards
+text:        #111827  text-gray-900 // main text
+mutedText:   #6b7280  text-gray-500 // secondary text
+border:      #e5e7eb border-gray-200
+primary:     #2563eb  bg-blue-600 / text-blue-600  // blue-600
+accent:      #22c55e   bg-green-500 / text-green-500  // green-500 (optional)
+
+🌙 Dark Mode
+background:  #0f172a   bg-slate-900 // slate-900
+surface:     #020617   bg-slate-950 // cards
+text:        #e5e7eb   text-gray-200
+mutedText:   #94a3b8   text-slate-400
+border:      #1e293b   border-slate-800
+primary:     #3b82f6   bg-blue-500 / text-blue-500           // blue-500
+accent:      #22c55e   bg-green-500 / text-green-500
+
+

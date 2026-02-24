@@ -1,23 +1,23 @@
-import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import Container from "../container/Container";
 import Logo from "../Logo";
 import LogoutBtn from "../buttons/LogoutBtn";
+import CommonBtn from "../buttons/CommonBtn";
+import {toggle} from "../../store/features/themeSlice"
+import type { RootState } from "../../store/store";
 
 interface NavItem {
   name: string;
   slug: string;
   active: boolean;
 }
-interface RootState {
-  auth: {
-    status: boolean;
-  };
-}
+
 function Header() {
   const authStatus = useSelector((state: RootState) => state.auth.status);
+const theme = useSelector((state: RootState) => state.theme.color)
   const navigate = useNavigate();
+  const dispatch=useDispatch()
   const navItems: NavItem[] = [
     {
       name: "Home",
@@ -46,19 +46,19 @@ function Header() {
     },
   ];
   return (
-    <header>
+    <header className="border-2  border-gray-300 dark:border-slate-800 py-4 ">
       <Container>
-        <nav className="flex">
-          <div>
-            <Logo width="50px" />
+        <nav className="flex justify-between items-center">
+          <div className="flex justify-center items-center">
+            <Logo width="50px" /> <h1 className="text-blue-600 font-bold text-xl dark:text-gray-200">Blog-app</h1>
           </div>
           <ul className="flex items-center gap-4 ml-auto">
             {navItems.map((item) =>
               item.active ? (
                 <li key={item.name}>
-                  <button className="px-2 py-2 hover:bg-blue-800 hover:text-white rounded-lg duration-300 hover:px-4 hover:py-4" onClick={() => navigate(item.slug)}>
+                  <CommonBtn  onClick={() => navigate(item.slug)}>
                     {item.name}
-                  </button>
+                  </CommonBtn>
                 </li>
               ) : null
             )}
@@ -66,7 +66,10 @@ function Header() {
               <li>
                 <LogoutBtn />
               </li>
-            )}
+            )} 
+          <CommonBtn variant="secondary" className="rounded-4xl" onClick={()=>dispatch(toggle())}>
+        {theme === "dark" ? "☀️ Light" : "🌙 Dark"}
+          </CommonBtn>
           </ul>
         </nav>
       </Container>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import  { useState, useEffect } from "react";
 import { Container, PostCard } from "../components/index";
 import dbService from "../appwrite/Db";
 import type { PostDocument } from "../appwrite/Db";

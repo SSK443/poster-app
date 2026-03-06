@@ -1,6 +1,6 @@
 
 
-import React, { useEffect, useCallback, use } from "react";
+import  { useEffect, useCallback,  } from "react";
 import { useForm } from "react-hook-form";
 import { useNavigate } from "react-router-dom";
 import dbService from "../../appwrite/Db";
@@ -27,7 +27,7 @@ function PostForm({ post }: PostPROPS) {
   const userData = useSelector(
     (state: RootState) => state.auth.userDetails
   );
-//old version of submit function
+
   // const { register, handleSubmit ,watch,setValue,control,getValues} =
   //   useForm< PostFormData>({
   //     defaultValues: {
@@ -40,7 +40,7 @@ function PostForm({ post }: PostPROPS) {
 
 
   //this is new version of submit function with slug auto generation and also i have added useCallback for slug transformation and also added useEffect for watching title change and update slug accordingly.
-  const { register, handleSubmit, watch, setValue, control, reset,getValues } =
+  const { register, handleSubmit, watch, setValue, control, reset } =
   useForm<PostFormData>({
     defaultValues: {
       title: "",

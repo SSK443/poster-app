@@ -7,7 +7,7 @@ interface LogoProps {
 function Logo({ width = "100px" }: LogoProps) {
   return (
     <img
-      src="/public/logo.png"
+      src="/logo.png"
       alt="Logo"
       style={{ width }}
       className="object-contain"

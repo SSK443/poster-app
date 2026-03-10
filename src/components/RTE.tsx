@@ -3,6 +3,7 @@
 import { Editor } from "@tinymce/tinymce-react";
 import { Controller } from "react-hook-form";
 import type { Control, FieldValues, Path } from "react-hook-form";
+import config from "../config/config";
 
 interface RTEProps<T extends FieldValues> {
   name: Path<T>;
@@ -40,7 +41,7 @@ export default function RTE<T extends FieldValues>({
           control={control}
           render={({ field }) => (
             <Editor
-            apiKey="minsn0aoub3lyjsv9lzga6bs0qko4cny8vuckpgxb2u30uup"
+            apiKey={config.vite_editor_api_id}
               value={(field.value ?? "") as string}
               // initialValue="text"
               onEditorChange={field.onChange}

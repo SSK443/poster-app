@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import type { RootState } from "../../store/store";
@@ -14,7 +14,6 @@ export default function Protected({
   children,
   authentication = true,
 }: ProtectedProps) {
-  const [loader, setLoader] = useState<boolean>(true);
   const authStatus = useSelector(
     (state: RootState) => state.auth.status
   );
@@ -25,12 +24,14 @@ useEffect(() => {
     navigate("/login", { replace: true });
   } else if (!authentication && authStatus) {
     navigate("/", { replace: true });
-  } else {
-    setLoader(false);
   }
 }, [authStatus, authentication, navigate]);
+const isAllowed =
+  (authentication && authStatus) ||
+  (!authentication && !authStatus);
 
-  if (loader) {
+
+  if (!isAllowed) {
     return (
       <div className="min-h-screen flex items-center justify-center 
       bg-white dark:bg-slate-900 transition-colors duration-300">
